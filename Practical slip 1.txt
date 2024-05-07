@@ -1,0 +1,120 @@
+Q1. Consider the following entities and their relationships. Create a
+RDB in 3 NF with appropriate data types and Constraints.
+Book (Book_no, title, author, price, year_published)
+Customer (cid, cname, addr)
+Relation between Book and Customer is Many to Many with quantity as descriptive
+attribute. Constraint: Primary key, price should be >0;
+
+
+CREATE TABLE Book (
+    Book_no INT PRIMARY KEY,
+    title VARCHAR(100),
+    author VARCHAR(100),
+    price DECIMAL(10, 2) CHECK (price > 0),
+    year_published INT
+);
+
+CREATE TABLE Customer (
+    cid INT PRIMARY KEY,
+    cname VARCHAR(100),
+    addr VARCHAR(255),
+    EMailId VARCHAR(255)
+);
+
+CREATE TABLE Book_Customer (
+    Book_no INT,
+    cid INT,
+    quantity INT,
+    FOREIGN KEY (Book_no) REFERENCES Book(Book_no),
+    FOREIGN KEY (cid) REFERENCES Customer(cid),
+    PRIMARY KEY (Book_no, cid)
+);
+
+INSERT INTO Book (Book_no, title, author, price, year_published) VALUES
+(1, 'DBMS', 'Mr. Gadhave', 150.00, 2022),
+(2, 'JAVA', 'Mr. Talore', 120.00, 2023),
+(3, 'PYTHON', 'Mr. Gadhave', 180.00, 2021),
+(4, 'DAA', 'Mr. Smith', 200.00, 2024),
+(5, 'OS', 'Mr. Talore', 100.00, 2023);
+
+
+INSERT INTO Customer (cid, cname, addr, EMailId) VALUES
+(1, 'John Doe', 'Mumbai', 'john.doe@example.com'),
+(2, 'Jane Smith', 'New York', 'jane.smith@example.com'),
+(3, 'Alice Johnson', 'London', 'alice.johnson@example.com'),
+(4, 'Bob Brown', 'Paris', 'bob.brown@example.com'),
+(5, 'Emma Lee', 'Tokyo', 'emma.lee@example.com');
+
+
+INSERT INTO Book_Customer (Book_no, cid, quantity) VALUES
+(1, 1, 2),
+(2, 3, 1),
+(3, 2, 3),
+(4, 4, 1),
+(5, 5, 2);
+
+
+
+1.Display the name of books whose author is “Mr. Gadhave”.
+
+SELECT title FROM Book WHERE author = 'Mr. Gadhave';
+
+2.Add column EMailId into customer table.
+
+ALTER TABLE Customer ADD COLUMN EMailId VARCHAR(255);
+
+3.Display customer details from 'Mumbai'.
+
+SELECT * FROM Customer WHERE addr = 'Mumbai';
+
+4.Display author-wise details of books
+
+SELECT author, title, price, year_published FROM Book ORDER BY author;
+
+5.Display customer names that have purchased more than 3 books.
+
+SELECT c.cname
+FROM Customer c
+INNER JOIN (
+    SELECT cid, COUNT(*) AS num_books
+    FROM Book_Customer
+    GROUP BY cid
+    HAVING COUNT(*) > 3
+) bc ON c.cid = bc.cid;
+
+
+6.Display book names having price between 100 and 200 and published.
+
+SELECT title
+FROM Book
+WHERE price BETWEEN 100 AND 200 AND year_published = YEAR(NOW());
+
+7. Update the title of books to “DBMS” whose author is “Mr. Talore”.
+
+UPDATE Book SET title = 'DBMS' WHERE author = 'Mr. Talore';
+
+
+
+Question 2 Write trigger to display the salary difference of employee.
+
+DELIMITER //
+
+CREATE TRIGGER salary_difference_trigger
+BEFORE UPDATE ON Employee
+FOR EACH ROW
+BEGIN
+    DECLARE old_salary DECIMAL(10, 2);
+    DECLARE new_salary DECIMAL(10, 2);
+    
+    SET old_salary = OLD.salary;
+    SET new_salary = NEW.salary;
+    
+    IF old_salary <> new_salary THEN
+        SELECT CONCAT('Salary difference for employee ', OLD.emp_id, ' : ', new_salary - old_salary) AS 'Salary Difference';
+    END IF;
+END//
+
+DELIMITER ;
+
+
+

@@ -1,0 +1,114 @@
+Q1. Consider the following entities and their relationships. Create a
+RDB in 3 NF with appropriate data types and Constraints. [15 Marks]
+Property (pno, desc, area, rate)
+Owner (owner_name, addr, phno)
+The relationship between owner and Property is One to Many. Constraint: Primary
+key, rate should be > 0
+
+
+
+CREATE TABLE Property (
+    pno INT PRIMARY KEY,
+    desc VARCHAR(255),
+    area VARCHAR(100),
+    rate DECIMAL(10, 2) CHECK (rate > 0)
+);
+
+CREATE TABLE Owner (
+    owner_name VARCHAR(100),
+    phno VARCHAR(15),
+    PRIMARY KEY (owner_name, phno)
+);
+
+
+INSERT INTO Property (pno, desc, area, rate) VALUES
+(1, 'Apartment', 'Pune', 90000.00),
+(2, 'House', 'Mumbai', 150000.00),
+(3, 'Villa', 'Bangalore', 200000.00),
+(4, 'Condo', 'Delhi', 80000.00),
+(5, 'Flat', 'Pune', 85000.00);
+
+
+INSERT INTO Owner (owner_name, phno) VALUES
+('Mr. Patil', '9876543210'),
+('Mr. Joshi', '1234567890'),
+('Mr. Khan', '8765432109'),
+('Mr. Singh', '2345678901'),
+('Ms. Sharma', '3456789012');
+
+
+
+
+1.Display area of property whose rate is less than 100000
+
+SELECT area FROM Property WHERE rate < 100000;
+
+
+2.Give the details of the owner whose property is at “Pune”.
+
+SELECT * FROM Owner WHERE owner_name IN (SELECT owner_name FROM Property WHERE area = 'Pune');
+
+
+3.Display area-wise property details.
+
+SELECT area, pno, desc, rate FROM Property ORDER BY area;
+
+
+4.Display the property owned by 'Mr.Patil' having the minimum rate
+
+SELECT * FROM Property WHERE pno IN (SELECT pno FROM Owner WHERE owner_name = 'Mr.Patil') ORDER BY rate LIMIT 1;
+
+
+5.Delete all properties from “Pune” owned by “Mr. Joshi”.
+
+DELETE FROM Property WHERE area = 'Pune' AND pno IN (SELECT pno FROM Owner WHERE owner_name = 'Mr. Joshi');
+
+
+6.Update the phone number of “Mr. Joshi” to 9922112233 who is having property.
+
+UPDATE Owner SET phno = '9922112233' WHERE owner_name = 'Mr. Joshi';
+
+
+7.Delete column address from Owner table.
+
+ALTER TABLE Owner DROP COLUMN addr;
+
+
+Question 2 Write cursor to display student’s information whose score is less than 50.
+
+CREATE PROCEDURE DisplayStudentsWithLowScores()
+BEGIN
+    DECLARE done BOOLEAN DEFAULT FALSE;
+    DECLARE student_name VARCHAR(100);
+    DECLARE student_score INT;
+
+    -- Declare a cursor for selecting student information
+    DECLARE student_cursor CURSOR FOR
+        SELECT name, score FROM Students WHERE score < 50;
+
+    -- Declare continue handler to exit the loop
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    -- Open the cursor
+    OPEN student_cursor;
+
+    -- Start fetching data from the cursor
+    read_loop: LOOP
+        -- Fetch student information into variables
+        FETCH student_cursor INTO student_name, student_score;
+
+        -- Check if the loop should be exited
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Display student information
+        SELECT CONCAT('Student: ', student_name, ', Score: ', student_score) AS 'Student Information';
+    END LOOP;
+
+    -- Close the cursor
+    CLOSE student_cursor;
+END;
+
+
+

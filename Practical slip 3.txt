@@ -1,0 +1,131 @@
+Q 1. Consider the following entities and their relationships. Create a
+RDB in 3 NF with appropriate data types and Constraints.
+Employee (emp_no, name, skill, payrate)
+Position (posting_no, skill)
+The relationship between Employee and Position is Many to Many with day and
+shift as descriptive attribute. Constraint: Primary key, payrate should be > 0.
+
+
+
+CREATE TABLE Employee (
+    emp_no INT PRIMARY KEY,
+    name VARCHAR(100),
+    payrate DECIMAL(10, 2) CHECK (payrate > 0)
+);
+
+CREATE TABLE Position (
+    posting_no INT PRIMARY KEY,
+    skill VARCHAR(100)
+);
+
+CREATE TABLE Employee_Position (
+    emp_no INT,
+    posting_no INT,
+    day VARCHAR(20),
+    shift VARCHAR(20),
+    FOREIGN KEY (emp_no) REFERENCES Employee(emp_no),
+    FOREIGN KEY (posting_no) REFERENCES Position(posting_no),
+    PRIMARY KEY (emp_no, posting_no, day, shift)
+);
+
+
+INSERT INTO Employee (emp_no, name, skill, payrate) VALUES
+(1, 'sarthak', 'Manager', 25000.00),
+(2, 'sanket', 'Waiter', 18000.00),
+(3, 'jayesh', 'Chef', 22000.00),
+(4, 'bhushan', 'Manager', 26000.00),
+(5, 'sunay', 'Chef', 23000.00);
+
+INSERT INTO Position (posting_no, skill) VALUES
+(201, 'Waiter'),
+(202, 'Chef'),
+(203, 'Manager'),
+(204, 'Server'),
+(205, 'Bartender');
+
+
+INSERT INTO Employee_Position (emp_no, posting_no, day, shift) VALUES
+(1, 203, 'Monday', 'Morning'),
+(2, 201, 'Tuesday', 'Afternoon'),
+(3, 202, 'Wednesday', 'Evening'),
+(4, 203, 'Thursday', 'Morning'),
+(5, 202, 'Friday', 'Evening');
+
+
+1. Display skill of employees name wise.
+
+SELECT Employee.name, Employee.skill
+FROM Employee;
+
+
+2. Update the posting of employee to 220 whose skill is “Manager”.
+
+UPDATE Employee
+SET posting_no = 220
+WHERE skill = 'Manager';
+
+
+3. Find the names and rate of pay of all employees who has allocated a duty.
+
+SELECT Employee.name, Employee.payrate
+FROM Employee
+INNER JOIN Employee_Position ON Employee.emp_no = Employee_Position.emp_no;
+
+
+
+4. Give employee number who is working at posting_no. 201, but don’t have the
+skill of waiter
+
+SELECT emp_no
+FROM Employee_Position
+WHERE posting_no = 201
+AND emp_no NOT IN (SELECT emp_no FROM Employee WHERE skill = 'Waiter');
+
+
+
+6. Display a list of names of employees who have skill of chef and who has
+assigned a duty.
+
+SELECT DISTINCT Employee.name
+FROM Employee
+INNER JOIN Employee_Position ON Employee.emp_no = Employee_Position.emp_no
+WHERE Employee.skill = 'Chef';
+
+
+7. Display shift wise employee details.
+
+SELECT Employee.emp_no, Employee.name, Employee_Position.day, Employee_Position.shift
+FROM Employee
+INNER JOIN Employee_Position ON Employee.emp_no = Employee_Position.emp_no;
+
+
+
+8. Update payrate of employees to 20000 whose skill is waiter.
+
+UPDATE Employee
+SET payrate = 20000
+WHERE skill = 'Waiter';
+
+
+Question 2 Write stored procedure to find maximum number of two.
+
+CREATE PROCEDURE FindMaxOfTwo (IN num1 INT, IN num2 INT)
+BEGIN
+    DECLARE max_num INT;
+    
+    IF num1 > num2 THEN
+        SET max_num = num1;
+    ELSE
+        SET max_num = num2;
+    END IF;
+
+    SELECT max_num AS 'Maximum Number';
+END;
+
+
+
+To call a procedure
+
+CALL FindMaxOfTwo(10, 20);
+
+
