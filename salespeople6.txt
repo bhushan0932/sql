@@ -1,0 +1,28 @@
+-- 1. Display name of salespeople matched with the salespeople serving them.
+SELECT C.CNAME AS CUSTOMER_NAME, S.SNAME AS SALESPERSON_NAME
+FROM Customer C
+JOIN Salespeople S ON C.SNUM = S.SNUM;
+
+-- 2. Find all orders by customers not located in same cities as their salespeople.
+SELECT O.*
+FROM Orders O
+JOIN Customer C ON O.CNUM = C.CNUM
+JOIN Salespeople S ON C.SNUM = S.SNUM
+WHERE C.CITY != S.CITY;
+
+-- 3. Display each order with salespeople names.
+SELECT O.*, S.SNAME AS SALESPERSON_NAME
+FROM Orders O
+JOIN Salespeople S ON O.SNUM = S.SNUM;
+
+-- 4. Display the names & cities of all customers with the same rating as ‘Rajesh’.
+SELECT C.CNAME AS CUSTOMER_NAME, C.CITY
+FROM Customer C
+JOIN Customer C2 ON C.RATING = C2.RATING AND C2.CNAME = 'Rajesh';
+
+-- 5. Calculate the amount of salespeople commission on each order by a customer with a rating above 100.
+SELECT O.*, (O.AMOUNT * S.COMMISSION) AS COMMISSION_AMOUNT
+FROM Orders O
+JOIN Customer C ON O.CNUM = C.CNUM
+JOIN Salespeople S ON C.SNUM = S.SNUM
+WHERE C.RATING > 100;

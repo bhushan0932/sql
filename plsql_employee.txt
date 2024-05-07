@@ -1,0 +1,31 @@
+1.Trigger to keep track of all transactions on the EMPLOYEE table:
+
+CREATE OR REPLACE TRIGGER employee_transaction_trigger
+AFTER INSERT OR UPDATE OR DELETE ON EMPLOYEE
+FOR EACH ROW
+BEGIN
+    IF INSERTING THEN
+        INSERT INTO Employee_Transactions (Transaction_Type, Transaction_Time, Employee_ID)
+        VALUES ('INSERT', SYSDATE, :NEW.Employee_ID);
+    ELSIF UPDATING THEN
+        INSERT INTO Employee_Transactions (Transaction_Type, Transaction_Time, Employee_ID)
+        VALUES ('UPDATE', SYSDATE, :NEW.Employee_ID);
+    ELSIF DELETING THEN
+        INSERT INTO Employee_Transactions (Transaction_Type, Transaction_Time, Employee_ID)
+        VALUES ('DELETE', SYSDATE, :OLD.Employee_ID);
+    END IF;
+END;
+/
+
+
+2.Trigger to check that employee salary does not become negative in the EMPLOYEE table:
+
+CREATE OR REPLACE TRIGGER employee_salary_check_trigger
+BEFORE UPDATE OF Salary ON EMPLOYEE
+FOR EACH ROW
+BEGIN
+    IF :NEW.Salary < 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Salary cannot be negative.');
+    END IF;
+END;
+/

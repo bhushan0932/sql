@@ -1,0 +1,44 @@
+-- 1. Display ORDERNO with order date in the format as ‘January 19 2010’.
+SELECT ONUM, TO_CHAR(ODATE, 'Month DD YYYY') AS ORDER_DATE FROM Orders;
+
+-- 2. Display all the columns of order table with appropriate alias name.
+SELECT ONUM AS ORDER_NUMBER, ODATE AS ORDER_DATE, SNUM AS SALES_PERSON_NUMBER, AMOUNT AS ORDER_AMOUNT FROM Orders;
+
+-- 3. Display all the salespeople who are living in Nagar or Nasik or Pune.
+SELECT * FROM Salespeople WHERE CITY IN ('Nagar', 'Nasik', 'Pune');
+
+-- 4. Display all the salespeople who are living in starting with char ‘N’.
+SELECT * FROM Salespeople WHERE CITY LIKE 'N%';
+
+-- 5. Display length of names of salespeople.
+SELECT SNAME, LENGTH(SNAME) AS NAME_LENGTH FROM Salespeople;
+
+-- 6. Find out second char of names of salespeople.
+SELECT SUBSTR(SNAME, 2, 1) AS SECOND_CHAR FROM Salespeople;
+
+-- 7. Find out the position of letter ‘A’ in each name of salespeople.
+SELECT SNAME, INSTR(SNAME, 'A') AS POSITION_OF_A FROM Salespeople;
+
+-- 8. Find out last char of names of salespeople.
+SELECT SNAME, SUBSTR(SNAME, -1) AS LAST_CHAR FROM Salespeople;
+
+-- 9. Find out first char of names of salespeople.
+SELECT SNAME, SUBSTR(SNAME, 1, 1) AS FIRST_CHAR FROM Salespeople;
+
+-- 10. Display all the customers having at least 2 ‘A’ in their names.
+SELECT * FROM Customer WHERE REGEXP_COUNT(CNAME, 'A') >= 2;
+
+-- 11. Display all the customers records arranged on the names.
+SELECT * FROM Customer ORDER BY CNAME;
+
+-- 12. Display all the customers records arranged on the names in descending order.
+SELECT * FROM Customer ORDER BY CNAME DESC;
+
+-- 13. Display total no. of customers in customer table.
+SELECT COUNT(*) AS TOTAL_CUSTOMERS FROM Customer;
+
+-- 14. Display all the orders in order table which ordered in month ‘FEB’.
+SELECT * FROM Orders WHERE TO_CHAR(ODATE, 'MM') = '02';
+
+-- 15. Display all the orders in order table which ordered in month ‘JAN’ and ‘FEB’.
+SELECT * FROM Orders WHERE TO_CHAR(ODATE, 'MM') IN ('01', '02');

@@ -1,0 +1,49 @@
+-- 1) Create the Employee table
+CREATE TABLE Employee (
+    Emp_id NUMBER PRIMARY KEY,
+    Emp_name VARCHAR2(20) NOT NULL,
+    Dept_name VARCHAR2(20) CHECK (Dept_name IN ('MCA', 'MBA', 'MCM')),
+    B_date DATE,
+    Designation VARCHAR2(20),
+    Salary NUMBER(5) CHECK (Salary > 15000 AND Salary < 25000)
+);
+
+-- 2) Insert 10 records
+INSERT INTO Employee (Emp_id, Emp_name, Dept_name, B_date, Designation, Salary) VALUES
+(1, 'John Doe', 'MCA', '1990-01-01', 'Software Engineer', 20000),
+(2, 'Jane Smith', 'MBA', '1991-02-02', 'Manager', 22000),
+-- Insert more records as needed...
+
+-- 3) Create index on Emp_id
+CREATE INDEX emp_id_index ON Employee(Emp_id);
+
+-- 4) Create index on Emp_name
+CREATE INDEX emp_name_index ON Employee(Emp_name);
+
+-- 5) Drop index created on Emp_id
+DROP INDEX emp_id_index;
+
+-- 6) Create unique index on Emp_name & Dept_name
+CREATE UNIQUE INDEX emp_name_dept_index ON Employee(Emp_name, Dept_name);
+
+-- 7) Drop index created on Emp_name
+DROP INDEX emp_name_index;
+
+-- 8) Create index on Emp_name & Designation
+CREATE INDEX emp_name_desig_index ON Employee(Emp_name, Designation);
+
+-- 9) Create reverse index on Dept_name
+CREATE INDEX dept_name_reverse_index ON Employee(Dept_name) REVERSE;
+
+-- 10) Modify reverse index which is created on Dept_name
+-- Drop the existing reverse index on Dept_name
+DROP INDEX dept_name_reverse_index;
+
+-- Recreate the reverse index on Dept_name with modifications
+CREATE INDEX dept_name_reverse_index ON Employee(Dept_name) REVERSE;
+
+
+-- 11) Drop all indexes
+DROP INDEX emp_name_dept_index;
+DROP INDEX emp_name_desig_index;
+DROP INDEX dept_name_reverse_index;

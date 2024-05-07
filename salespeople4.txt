@@ -1,0 +1,65 @@
+-- 1. Display number of salespeople living in each city.
+SELECT CITY, COUNT(*) AS SALESPEOPLE_COUNT 
+FROM Salespeople 
+GROUP BY CITY;
+
+-- 2. Display number of orders placed in each year.
+SELECT EXTRACT(YEAR FROM ODATE) AS ORDER_YEAR, COUNT(*) AS ORDER_COUNT 
+FROM Orders 
+GROUP BY EXTRACT(YEAR FROM ODATE);
+
+-- 3. Display no of orders placed to salespeople with salespeople no.
+SELECT SNUM, COUNT(*) AS ORDER_COUNT 
+FROM Orders 
+GROUP BY SNUM;
+
+-- 4. Display details of maximum order above 3000.
+SELECT * 
+FROM Orders 
+WHERE AMOUNT = (SELECT MAX(AMOUNT) FROM Orders WHERE AMOUNT > 3000);
+
+-- 5. Display details of order no date wise.
+SELECT TO_CHAR(ODATE, 'YYYY-MM-DD') AS ORDER_DATE, COUNT(*) AS ORDER_COUNT 
+FROM Orders 
+GROUP BY TO_CHAR(ODATE, 'YYYY-MM-DD');
+
+-- 6. Display highest rating in each city.
+SELECT CITY, MAX(RATING) AS HIGHEST_RATING 
+FROM Customer 
+GROUP BY CITY;
+
+-- 7. Display total amount of salespeople with salespeople number.
+SELECT SNUM, SUM(AMOUNT) AS TOTAL_AMOUNT 
+FROM Orders 
+GROUP BY SNUM;
+
+-- 8. Display no of salespeople working in each city.
+SELECT CITY, COUNT(*) AS SALESPEOPLE_COUNT 
+FROM Salespeople 
+GROUP BY CITY;
+
+-- 9. Display no of order placed in each month.
+SELECT TO_CHAR(ODATE, 'MM') AS ORDER_MONTH, COUNT(*) AS ORDER_COUNT 
+FROM Orders 
+GROUP BY TO_CHAR(ODATE, 'MM');
+
+-- 10. Display total rating of each city.
+SELECT CITY, SUM(RATING) AS TOTAL_RATING 
+FROM Customer 
+GROUP BY CITY;
+
+-- 11. Display no of salespeople in each commission group.
+SELECT CASE 
+         WHEN COMMISSION >= 0 AND COMMISSION <= 0.05 THEN 'Group 1' 
+         WHEN COMMISSION > 0.05 AND COMMISSION <= 0.1 THEN 'Group 2' 
+         WHEN COMMISSION > 0.1 AND COMMISSION <= 0.15 THEN 'Group 3' 
+         ELSE 'Group 4' 
+       END AS COMMISSION_GROUP, 
+       COUNT(*) AS SALESPEOPLE_COUNT 
+FROM Salespeople 
+GROUP BY COMMISSION_GROUP;
+
+-- 12. Display salesperson wise maximum amount from sales table.
+SELECT SNUM, MAX(AMOUNT) AS MAXIMUM_AMOUNT 
+FROM Orders 
+GROUP BY SNUM;

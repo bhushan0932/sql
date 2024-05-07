@@ -1,0 +1,46 @@
+-- 1. Display the details of salespeople who have commission more than average commission.
+SELECT * 
+FROM Salespeople 
+WHERE COMMISSION > (SELECT AVG(COMMISSION) FROM Salespeople);
+
+-- 2. Display the details of salespeople who have minimum commission.
+SELECT * 
+FROM Salespeople 
+WHERE COMMISSION = (SELECT MIN(COMMISSION) FROM Salespeople);
+
+-- 3. Display the details of salespeople who have commission same as that of ‘Amit’.
+SELECT * 
+FROM Salespeople 
+WHERE COMMISSION = (SELECT COMMISSION FROM Salespeople WHERE SNAME = 'Amit');
+
+-- 4. Display customers who have maximum rating.
+SELECT * 
+FROM Customer 
+WHERE RATING = (SELECT MAX(RATING) FROM Customer);
+
+-- 5. Display customers who have rating more than average rating.
+SELECT * 
+FROM Customer 
+WHERE RATING > (SELECT AVG(RATING) FROM Customer);
+
+-- 6. Display the customer name with their salesperson name.
+SELECT C.CNAME AS CUSTOMER_NAME, S.SNAME AS SALESPERSON_NAME
+FROM Customer C
+JOIN Salespeople S ON C.SNUM = S.SNUM;
+
+-- 7. Display the customer name who are located in same city as that of their salesperson.
+SELECT C.CNAME AS CUSTOMER_NAME
+FROM Customer C
+JOIN Salespeople S ON C.SNUM = S.SNUM
+WHERE C.CITY = S.CITY;
+
+-- 8. Display the customer name who are located in same city as that of ‘Rajesh’.
+SELECT C.CNAME AS CUSTOMER_NAME
+FROM Customer C
+JOIN Salespeople S ON C.SNUM = S.SNUM
+WHERE S.SNAME = 'Rajesh';
+
+-- 9. Display the order details with the salesperson name.
+SELECT O.*, S.SNAME AS SALESPERSON_NAME
+FROM Orders O
+JOIN Salespeople S ON O.SNUM = S.SNUM;

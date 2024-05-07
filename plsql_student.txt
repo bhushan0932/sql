@@ -1,0 +1,49 @@
+1. PL/SQL to retrieve roll no 5 and increase marks1 by 10:
+
+DECLARE
+    v_marks1 Student.Marks1%TYPE;
+BEGIN
+    SELECT Marks1 INTO v_marks1
+    FROM Student
+    WHERE Rollno = 5;
+
+    UPDATE Student
+    SET Marks1 = v_marks1 + 10
+    WHERE Rollno = 5;
+
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('Marks1 increased by 10 for Rollno 5.');
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Rollno 5 not found.');
+END;
+/
+
+
+2.PL/SQL to increase marks2 of all students by 5:
+
+BEGIN
+    UPDATE Student
+    SET Marks2 = Marks2 + 5;
+
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('Marks2 increased by 5 for all students.');
+END;
+/
+
+
+-- Create Student table
+CREATE TABLE Student (
+    Rollno NUMBER(2),
+    Marks1 NUMBER(2),
+    Marks2 NUMBER(2)
+);
+
+-- Insert 5 records into Student Table
+INSERT INTO Student (Rollno, Marks1, Marks2) VALUES (1, 80, 85);
+INSERT INTO Student (Rollno, Marks1, Marks2) VALUES (2, 75, 90);
+INSERT INTO Student (Rollno, Marks1, Marks2) VALUES (3, 85, 80);
+INSERT INTO Student (Rollno, Marks1, Marks2) VALUES (4, 70, 95);
+INSERT INTO Student (Rollno, Marks1, Marks2) VALUES (5, 65, 75);
+
+

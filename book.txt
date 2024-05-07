@@ -1,0 +1,107 @@
+-- Book table
+CREATE TABLE Book (
+    bno INT PRIMARY KEY,
+    bname VARCHAR(255),
+    price DECIMAL(10, 2) CHECK (price > 0)
+);
+
+-- Dealer table
+CREATE TABLE Dealer (
+    dno INT PRIMARY KEY,
+    dname VARCHAR(255),
+    address VARCHAR(255)
+);
+
+-- Dept table
+CREATE TABLE Dept (
+    dept_no INT PRIMARY KEY,
+    dept_name VARCHAR(255),
+    head VARCHAR(255)
+);
+
+-- Foreign keys
+ALTER TABLE Book ADD COLUMN dno INT;
+ALTER TABLE Book ADD COLUMN dept_no INT;
+
+ALTER TABLE Book ADD CONSTRAINT fk_dealer FOREIGN KEY (dno) REFERENCES Dealer(dno);
+ALTER TABLE Book ADD CONSTRAINT fk_dept FOREIGN KEY (dept_no) REFERENCES Dept(dept_no);
+
+-- 1) Give the name of dept spending the maximum amount on books.
+SELECT d.dept_name
+FROM Dept d
+JOIN (
+    SELECT dept_no, SUM(price) AS total_spending
+    FROM Book
+    GROUP BY dept_no
+    ORDER BY total_spending DESC
+    LIMIT 1
+) AS dept_spending ON d.dept_no = dept_spending.dept_no;
+
+-- 2) List names of dept to whom ‘Tata Mg-Hill’ has supplied books.
+SELECT d.dept_name
+FROM Dept d
+JOIN Book b ON d.dept_no = b.dept_no
+JOIN Dealer dl ON b.dno = dl.dno
+WHERE dl.dname = 'Tata Mg-Hill';
+
+-- 3) List the names & prices of books bought for ‘computer’ dept.
+SELECT b.bname, b.price
+FROM Book b
+JOIN Dept d ON b.dept_no = d.dept_no
+WHERE d.dept_name = 'Computer';
+
+-- 4) Print dept wise expenditure on books.
+SELECT d.dept_name, SUM(b.price) AS total_expenditure
+FROM Dept d
+JOIN Book b ON d.dept_no = b.dept_no
+GROUP BY d.dept_name;
+
+
+-- Movie table
+CREATE TABLE Movie (
+    mvno INT PRIMARY KEY,
+    mvname VARCHAR(255),
+    release_year INT CHECK (release_year > 0)
+);
+
+-- Actor table
+CREATE TABLE Actor (
+    actno INT PRIMARY KEY,
+    actname VARCHAR(255)
+);
+
+-- Movie-Actor relationship table
+CREATE TABLE Movie_Actor (
+    mvno INT,
+    actno INT,
+    FOREIGN KEY (mvno) REFERENCES Movie(mvno),
+    FOREIGN KEY (actno) REFERENCES Actor(actno)
+);
+
+
+-- 1) Count no of movies in which ‘Aamir’ has acted.
+SELECT COUNT(*) AS movies_count
+FROM Movie_Actor ma
+JOIN Actor a ON ma.actno = a.actno
+WHERE a.actname = 'Aamir';
+
+-- 2) Find all actors of the movie ‘3 Idiots’.
+SELECT a.actname
+FROM Movie_Actor ma
+JOIN Actor a ON ma.actno = a.actno
+JOIN Movie m ON ma.mvno = m.mvno
+WHERE m.mvname = '3 Idiots';
+
+-- 3) Find all movies of ‘Amitabh’ which are released in year 1975.
+SELECT m.mvname
+FROM Movie_Actor ma
+JOIN Actor a ON ma.actno = a.actno
+JOIN Movie m ON ma.mvno = m.mvno
+WHERE a.actname = 'Amitabh' AND m.release_year = 1975;
+
+-- 4) List actor-wise list of pictures along with release year & movie name.
+SELECT a.actname, m.release_year, m.mvname
+FROM Movie_Actor ma
+JOIN Actor a ON ma.actno = a.actno
+JOIN Movie m ON ma.mvno = m.mvno;
+

@@ -1,0 +1,47 @@
+-- 1. Display all the customer records arranged on rating in descending order.
+SELECT * FROM Customer ORDER BY RATING DESC;
+
+-- 2. Display all the salesperson records arranged on snum.
+SELECT * FROM Salespeople ORDER BY SNUM;
+
+-- 3. Display the count for the total number of customers in the customer table.
+SELECT COUNT(*) AS TOTAL_CUSTOMERS FROM Customer;
+
+-- 4. Display the count of snum in the order table without duplication of snum.
+SELECT COUNT(DISTINCT SNUM) AS UNIQUE_SNUM_COUNT FROM Orders;
+
+-- 5. Display the count of all orders for FEB 10.
+SELECT COUNT(*) AS FEB_10_ORDER_COUNT FROM Orders WHERE TO_CHAR(ODATE, 'YYYY-MM') = '2024-02';
+
+-- 6. Display system date with time.
+SELECT SYSDATE FROM dual;
+
+-- 7. Find out the number of months from order placed.
+SELECT MONTHS_BETWEEN(SYSDATE, ODATE) AS MONTHS_FROM_ORDER_PLACED FROM Orders;
+
+-- 8. Find out the number of weeks from order placed.
+SELECT TRUNC((SYSDATE - ODATE) / 7) AS WEEKS_FROM_ORDER_PLACED FROM Orders;
+
+-- 9. Find out the day of ODATE.
+SELECT TO_CHAR(ODATE, 'Day') AS ORDER_DAY FROM Orders;
+
+-- 10. Find out the date after 5 months of each order, display with a heading.
+SELECT ONUM, ADD_MONTHS(ODATE, 5) AS DATE_AFTER_5_MONTHS FROM Orders;
+
+-- 11. Find out the date of the last day of the month in which orders were placed.
+SELECT LAST_DAY(ODATE) AS LAST_DAY_OF_MONTH FROM Orders;
+
+-- 12. Display the number of days from the order placed.
+SELECT TRUNC(SYSDATE - ODATE) AS DAYS_FROM_ORDER_PLACED FROM Orders;
+
+-- 13. Display the count of different non-NULL city values in the customer table.
+SELECT COUNT(DISTINCT CITY) AS UNIQUE_CITY_COUNT FROM Customer WHERE CITY IS NOT NULL;
+
+-- 14. Display the maximum amount from the orders table with a column heading.
+SELECT MAX(AMOUNT) AS MAXIMUM_AMOUNT FROM Orders;
+
+-- 15. Display the minimum rating within the customer table.
+SELECT MIN(RATING) AS MINIMUM_RATING FROM Customer;
+
+-- 16. Display the average of amount.
+SELECT AVG(AMOUNT) AS AVERAGE_AMOUNT FROM Orders;

@@ -1,0 +1,109 @@
+-- 1) Create tables
+CREATE TABLE Salespeople (
+    SNUM VARCHAR2(6),
+    SNAME VARCHAR2(20),
+    CITY VARCHAR2(20),
+    COMMISSION NUMBER(3,2)
+);
+
+CREATE TABLE Orders (
+    ONUM VARCHAR2(6),
+    ODATE DATE,
+    SNUM VARCHAR2(6),
+    AMOUNT NUMBER(6),
+    FOREIGN KEY (SNUM) REFERENCES Salespeople(SNUM)
+);
+
+CREATE TABLE Customer (
+    CNUM VARCHAR2(6),
+    CNAME VARCHAR2(20),
+    CITY VARCHAR2(20),
+    RATING NUMBER(3),
+    SNUM VARCHAR2(6),
+    FOREIGN KEY (SNUM) REFERENCES Salespeople(SNUM)
+);
+
+-- 2) Add at least 10 records
+-- Insert records into Salespeople table
+INSERT INTO Salespeople (SNUM, SNAME, CITY, COMMISSION) VALUES
+('101', 'John Doe', 'Pune', 0.12),
+('102', 'Jane Smith', 'Mumbai', 0.10),
+('103', 'Alice Johnson', 'Delhi', 0.15),
+('104', 'Bob Brown', 'Pune', 0.11),
+('105', 'Charlie Wilson', 'Pune', 0.12);
+
+-- Insert records into Orders table
+INSERT INTO Orders (ONUM, ODATE, SNUM, AMOUNT) VALUES
+('001', '2024-05-01', '101', 5000),
+('002', '2024-05-02', '102', 7000),
+('003', '2024-05-03', '103', 6000),
+('004', '2024-05-04', '104', 8000),
+('005', '2024-05-05', '105', 9000);
+
+-- Insert records into Customer table
+INSERT INTO Customer (CNUM, CNAME, CITY, RATING, SNUM) VALUES
+('001', 'Customer 1', 'Pune', 150, '101'),
+('002', 'Customer 2', 'Mumbai', 200, '102'),
+('003', 'Customer 3', 'Delhi', 100, '103'),
+('004', 'Customer 4', 'Pune', 250, '104'),
+('005', 'Customer 5', 'Pune', 180, '105');
+
+-- 3) Display all records with all Salespeople information
+SELECT * FROM Salespeople;
+
+-- 4) Display details of fields SNAME and commission
+SELECT SNAME, COMMISSION FROM Salespeople;
+
+-- 5) Display the ODATE, SNUM, ONUM, amt from orders table
+SELECT ODATE, SNUM, ONUM, AMOUNT FROM Orders;
+
+-- 6) Display SNUM from orders table without duplication
+SELECT DISTINCT SNUM FROM Orders;
+
+-- 7) Display name and city of salesman where city is pune
+SELECT SNAME, CITY FROM Salespeople WHERE CITY = 'Pune';
+
+-- 8) Display all details of customers where rating is 100
+SELECT * FROM Customer WHERE RATING = 100;
+
+-- 9) Display all of customers table where salesman no is 101
+SELECT * FROM Customer WHERE SNUM = '101';
+
+-- 10) Display no of salesperson with orders currently in the orders table without any repeats
+SELECT COUNT(DISTINCT SNUM) FROM Orders;
+
+-- 11) Display all the customers where rating is more than 200
+SELECT * FROM Customer WHERE RATING > 200;
+
+-- 12) Display all the customers where city is Mumbai and rating is more than 100
+SELECT * FROM Customer WHERE CITY = 'Mumbai' AND RATING > 100;
+
+-- 13) Display all the customers where city is either pune or Mumbai
+SELECT * FROM Customer WHERE CITY IN ('Pune', 'Mumbai');
+
+-- 14) List all the customers not having city pune or rating more than 100
+SELECT * FROM Customer WHERE CITY != 'Pune' OR RATING <= 100;
+
+-- 15) List all the orders between order dates 10 march’10 to 30 march’10
+SELECT * FROM Orders WHERE ODATE BETWEEN TO_DATE('2024-05-01', 'YYYY-MM-DD') AND TO_DATE('2024-05-05', 'YYYY-MM-DD');
+
+-- 16) Display all the orders more than 1000 amt
+SELECT * FROM Orders WHERE AMOUNT > 1000;
+
+-- 17) Display names and cities of all salespeople in pune with commission above 10
+SELECT SNAME, CITY FROM Salespeople WHERE CITY = 'Pune' AND COMMISSION > 0.10;
+
+-- 18) Display all the customers excluding those with rating <= 100 unless they are located in nagar
+SELECT * FROM Customer WHERE RATING > 100 OR CITY = 'Nagar';
+
+-- 19) Display all the salesperson names starting with character ‘G’
+SELECT SNAME FROM Salespeople WHERE SNAME LIKE 'G%';
+
+-- 20) Display all the salesperson names starting with character ‘G’ the 4 th character is ‘A’
+SELECT SNAME FROM Salespeople WHERE SNAME LIKE 'G__A%';
+
+-- 21) Find all the records from customers table where city is not known that is NULL
+SELECT * FROM Customer WHERE CITY IS NULL;
+
+-- 22) Display all the customer names starting with character ‘A’ to ‘G’
+SELECT * FROM Customer WHERE CNAME BETWEEN 'A' AND 'G';

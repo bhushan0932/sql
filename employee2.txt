@@ -1,0 +1,38 @@
+-- 1. Create a view for Employee Table
+CREATE VIEW Employee_View AS
+SELECT * FROM Employee;
+
+-- 2. Insert three records into view (assuming the view is updatable)
+INSERT INTO Employee_View (Emp_id, Emp_name, Dept_name, B_date, Designation, Salary) VALUES
+(11, 'Alice Brown', 'MCA', '1995-05-15', 'Software Engineer', 18000),
+(12, 'Bob Johnson', 'MBA', '1994-09-20', 'Manager', 22000),
+(13, 'Charlie Wilson', 'MCM', '1993-12-10', 'Analyst', 20000);
+
+-- 3. Update two records into view
+UPDATE Employee_View SET Salary = 23000 WHERE Emp_id = 11;
+UPDATE Employee_View SET Salary = 25000 WHERE Emp_id = 12;
+
+-- 4. Delete One record from view
+DELETE FROM Employee_View WHERE Emp_id = 13;
+
+-- 5. Drop created view
+DROP VIEW Employee_View;
+
+-- 6. Display the maximum salary of dept with dept no.
+SELECT Dept_name, MAX(Salary) AS Max_Salary
+FROM Employee
+GROUP BY Dept_name;
+
+-- 7. Create a view for Employee Table whose salary > 15000
+CREATE VIEW Employee_Salary_View AS
+SELECT * FROM Employee WHERE Salary > 15000;
+
+-- 8. Create a new view to store only employee name & b_date
+CREATE VIEW Employee_Name_BDate_View AS
+SELECT Emp_name, B_date FROM Employee;
+
+-- 9. Create a view to display no of employees department wise
+CREATE VIEW Employee_Count_By_Dept AS
+SELECT Dept_name, COUNT(*) AS Employee_Count
+FROM Employee
+GROUP BY Dept_name;

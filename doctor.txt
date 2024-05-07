@@ -1,0 +1,70 @@
+CREATE TABLE DOCTOR (
+    DOC_ID NUMBER(3),
+    DOC_NAME VARCHAR2(20),
+    BIRTHDATE VARCHAR2(20),
+    GENDER CHAR(1) CHECK (GENDER IN ('M', 'F'))
+);
+
+-- 1. Modify the table structure DOCTOR by adding following fields as follows
+ALTER TABLE DOCTOR
+ADD (
+    ADDRESS VARCHAR2(20),
+    SALARY NUMBER(5),
+    PHONE NUMBER(10)
+);
+
+-- 2. Display Definition of table
+DESC DOCTOR;
+
+-- 3. Modify the data type of the column BIRTHDATE as DATE
+ALTER TABLE DOCTOR
+MODIFY (BIRTHDATE DATE);
+
+-- 4. Add primary key constraint by name c1 to the column DOC_ID by column level
+ALTER TABLE DOCTOR
+ADD CONSTRAINT c1 PRIMARY KEY (DOC_ID);
+
+-- 5. Add not null constraint to the column GENDER and only lower case letters are accepted
+ALTER TABLE DOCTOR
+MODIFY (GENDER CHAR(1) CONSTRAINT gender_chk CHECK (GENDER IN ('m', 'f')));
+
+-- 6. Modify the width of DOC_NAME to 30
+ALTER TABLE DOCTOR
+MODIFY (DOC_NAME VARCHAR2(30));
+
+-- 7. Disable c1 constraint
+ALTER TABLE DOCTOR
+DISABLE CONSTRAINT c1;
+
+-- 8. Enable c1 constraint
+ALTER TABLE DOCTOR
+ENABLE CONSTRAINT c1;
+
+-- 9. Add unique key constraint to the column DOC_NAME by using Table Level
+ALTER TABLE DOCTOR
+ADD CONSTRAINT unique_doc_name UNIQUE (DOC_NAME);
+
+-- 10. Drop constraint created on DOC_NAME
+ALTER TABLE DOCTOR
+DROP CONSTRAINT unique_doc_name;
+
+-- 11. Insert at least 10 records to the DOCTOR table
+INSERT INTO DOCTOR (DOC_ID, DOC_NAME, BIRTHDATE, GENDER, ADDRESS, SALARY, PHONE)
+VALUES
+(1, 'Sarthak kale', '2000-01-01', 'm', '123 Main St', 50000, 1234567890),
+(2, 'sana', '2002-05-10', 'f', '456 Oak St', 60000, 9876543210),
+-- Add more records as needed...
+
+-- 12. Display all the records of the DOCTOR in ascending and descending order
+SELECT * FROM DOCTOR ORDER BY DOC_NAME ASC;
+SELECT * FROM DOCTOR ORDER BY DOC_NAME DESC;
+
+-- 13. Drop column PHONE from table
+ALTER TABLE DOCTOR
+DROP COLUMN PHONE;
+
+-- 14. Truncate the DOCTOR table
+TRUNCATE TABLE DOCTOR;
+
+-- 15. Drop table DOCTOR
+DROP TABLE DOCTOR;
